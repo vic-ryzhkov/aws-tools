@@ -29,15 +29,15 @@ with open('results.json') as json_file:
         print('No vulnerabilities')
     else:
         for p in data['Results'][0]['Vulnerabilities']:
-            cveId = str(p['VulnerabilityID'])
+            cveId = str(p['VulnerabilityID']) if 'VulnerabilityID' in p else ''
             cveTitle = str(p['Title']) if 'Title' in p else str(p['VulnerabilityID'])
-            cveDescription = str(p['Description'])
+            cveDescription = str(p['Description']) if 'Description' in p else ''
             cveDescription = (cveDescription[:1021] + '..') if len(cveDescription) > 1021 else cveDescription
-            packageName = str(p['PkgName'])
-            installedVersion = str(p['InstalledVersion'])
-            fixedVersion = str(p['FixedVersion'])
+            packageName = str(p['PkgName']) if 'PkgName' in p else ''
+            installedVersion = str(p['InstalledVersion']) if 'InstalledVersion' in p else ''
+            fixedVersion = str(p['FixedVersion']) if 'FixedVersion' in p else ''
             trivySeverity = str(p['Severity'])
-            cveReference = str(p['References'][0])
+            cveReference = str(p['References'][0]) if ('References' in p and p['References']) else ''
             # create ISO 8601 timestamp
             iso8601Time = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc).isoformat()
             # map Trivy severity to ASFF severity
